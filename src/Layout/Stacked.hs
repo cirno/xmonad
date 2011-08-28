@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleInstances, MultiParamTypeClasses, TypeSynonymInstances #-}
+{-# LANGUAGE FlexibleInstances, MultiParamTypeClasses, TypeSynonymInstances ViewPatterns #-}
 
 import XMonad
 
@@ -44,7 +44,8 @@ data StackedDecoration a = StackedDecoration Bool deriving (Show, Read)
 
 instance Eq a => DecorationStyle StackedDecoration a where
     describeDeco _ = "Simple borderless decoration for Stacked layout"
-    shrink _ (Rectangle _ _ _ dh) (Rectangle x y w h) = Rectangle x (y - 1 + fi dh) w (h + 1 - dh)
 
-stackedDeco s t = named "Stacked" . noBorders $ (decoration s t $ StackedDecoration True) (Stacked dh)
-  where dh = fromIntegral (decoHeight t) :: Int
+    shrink _ (Rectangle _ _ _ (pred -> dh)) (Rectangle x y w h) = Rectangle x (y + fi dh) w (h - dh)
+
+stackedDeco s t@(Stacked . fi . decoHeight -> l) =
+    named "Stacked" . noBorders $ decoration s t StackedDecoration l
