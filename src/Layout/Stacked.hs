@@ -44,16 +44,19 @@ instance LayoutClass Stacked Window where
         split []              _    = []
         split (length -> num) part = map infExpand $ splitVertically num part
        
-        infExpand (Rectangle x y ww _) = Rectangle x y ww (-1)
+        infExpand (Rectangle x y ww _) = Rectangle x y ww 1
 
--- Simple decorations for Stacked layout
-data StackedDecoration a = StackedDecoration deriving (Show, Read)
+-- Simple decoration for Stacked layout
+data SimpleDecoration a = SimpleDecoration deriving (Show, Read)
 
-instance Eq a => DecorationStyle StackedDecoration a where
-    describeDeco _ = "Simple decoration for Stacked layout"
+instance Eq a => DecorationStyle SimpleDecoration a where
+    describeDeco _ = "Simple decoration"
 
-    shrink _ (Rectangle _ _ _ dh) (Rectangle x y w (-1)) = Rectangle x y w 1
-    shrink _ (Rectangle _ _ _ dh) (Rectangle x y w h)    = Rectangle x (y + fi dh) w (h - dh)
+    shrink _ (Rectangle _ _ _ dh) r@(Rectangle x y w h)
+        | h == 1    = r
+        | otherwise = Rectangle x (y + fi dh) w (h - dh)
 
 stackedDeco s t@(fi . decoHeight -> dh) =
-    named "Stacked" $ decoration s t StackedDecoration (Stacked dh)
+    named "Stacked" $ decoration s t SimpleDecoration (Stacked dh)
+
+deco s t = decoration s t SimpleDecoration
