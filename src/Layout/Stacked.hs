@@ -6,7 +6,6 @@ import XMonad.StackSet as S
 
 import XMonad.Layout.Named
 import XMonad.Layout.Decoration
-import XMonad.Layout.NoBorders
 
 import Data.Ratio ((%))
 import System
@@ -59,4 +58,4 @@ instance Eq a => DecorationStyle SimpleDecoration a where
 stackedDeco s t@(fi . decoHeight -> dh) =
     named "Stacked" $ decoration s t SimpleDecoration (Stacked dh)
 
-deco s t = decoration s t SimpleDecoration
+simpleDeco s t = named "SimpleDeco" $ decoration s t SimpleDecoration
