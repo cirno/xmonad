@@ -52,7 +52,7 @@ instance Eq a => DecorationStyle SimpleDecoration a where
     describeDeco _ = "Simple decoration"
 
     shrink _ (Rectangle _ _ _ dh) r@(Rectangle x y w h)
-        | h == 1    = r
+        | h <= dh   = r
         | otherwise = Rectangle x (y + fi dh) w (h - dh)
 
 stackedDeco s t@(fi . decoHeight -> dh) =
