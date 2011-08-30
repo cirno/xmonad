@@ -41,9 +41,9 @@ instance LayoutClass Stacked Window where
         bottoms = split dns bottom
         
         split []              _    = []
-        split (length -> num) part = map infExpand $ splitVertically num part
+        split (length -> num) part = map compress $ splitVertically num part
        
-        infExpand (Rectangle x y ww _) = Rectangle x y ww 1
+        compress (Rectangle x y ww _) = Rectangle x y ww 1
 
 -- Simple decoration for Stacked layout
 data SimpleDecoration a = SimpleDecoration deriving (Show, Read)
